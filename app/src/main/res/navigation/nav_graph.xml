@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+
+    app:startDestination="@id/adminMainScreen">
+
+    <fragment
+        android:id="@+id/adminMainScreen"
+        android:name="com.example.farmhouseapp.AdminMainScreen"
+        android:label="fragment_admin_main_screen"
+        tools:layout="@layout/fragment_admin_main_screen" >
+        <action
+            android:id="@+id/action_adminMainScreen_to_addDoctor"
+            app:destination="@id/addDoctor" />
+        <action
+            android:id="@+id/action_adminMainScreen_to_addAnimals"
+            app:destination="@id/addAnimals" />
+        <action
+            android:id="@+id/action_adminMainScreen_to_addFarmHouse"
+            app:destination="@id/addFarmHouse" />
+        <action
+            android:id="@+id/action_adminMainScreen_to_addUser"
+            app:destination="@id/addUser" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAnimals"
+        android:name="com.example.farmhouseapp.fragments.AddAnimals"
+        android:label="fragment_add_animals"
+        tools:layout="@layout/fragment_add_animals" >
+        <action
+            android:id="@+id/action_addAnimals_to_adminMainScreen"
+            app:destination="@id/adminMainScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/addDoctor"
+        android:name="com.example.farmhouseapp.fragments.AddDoctor"
+        android:label="fragment_add_doctor"
+        tools:layout="@layout/fragment_add_doctor" >
+        <action
+            android:id="@+id/action_addDoctor_to_adminMainScreen"
+            app:destination="@id/adminMainScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFarmHouse"
+        android:name="com.example.farmhouseapp.fragments.AddFarmHouse"
+        android:label="fragment_add_farm_house"
+        tools:layout="@layout/fragment_add_farm_house" >
+        <action
+            android:id="@+id/action_addFarmHouse_to_adminMainScreen"
+            app:destination="@id/adminMainScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/addUser"
+        android:name="com.example.farmhouseapp.fragments.AddUser"
+        android:label="fragment_add_user"
+        tools:layout="@layout/fragment_add_user" >
+        <action
+            android:id="@+id/action_addUser_to_adminMainScreen"
+            app:destination="@id/adminMainScreen" />
+    </fragment>
+</navigation>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "644496479087",
+    "project_id": "farmhouseapp-a0083",
+    "storage_bucket": "farmhouseapp-a0083.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644496479087:android:9f2ab272f77fc9fa840e9a",
+        "android_client_info": {
+          "package_name": "com.example.farmhouseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644496479087-3gc5321knogal6s253lfnj27i4i4mn7r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.farmhouseapp",
+            "certificate_hash": "cdd2d1e8dfbad53f5c7777045d0c24e89cf95428"
+          }
+        },
+        {
+          "client_id": "644496479087-v8h61cboq3npo2ovfmlljnf34v6blcp5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB48tqwz3XKjpdiQRSq2tviN0B7w-Bl1l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644496479087-v8h61cboq3npo2ovfmlljnf34v6blcp5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
