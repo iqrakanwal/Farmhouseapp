@@ -3,12 +3,16 @@ package com.example.farmhouseapp.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.farmhouseapp.AdminMainScreen
 import com.example.farmhouseapp.R
-import com.example.farmmanagment.ui.LoginActivity
+import com.example.farmhouseapp.UserAccount
+import com.example.farmhouseapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_first_screen.*
 
 class FirstScreen : AppCompatActivity() {
+    companion object {
+        lateinit var userAccount: UserAccount
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)

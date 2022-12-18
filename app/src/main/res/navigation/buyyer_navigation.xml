@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/buyyer_navigation"
+    app:startDestination="@id/showAnimalFragment">
+
+
+    <fragment
+        android:id="@+id/showAnimalFragment"
+        android:name="com.example.farmhouseapp.fragments.ShowAnimalFragment"
+        android:label="fragment_show_animal"
+        tools:layout="@layout/fragment_show_animal" >
+        <action
+            android:id="@+id/action_showAnimalFragment_to_orderAnimalFragment"
+            app:destination="@id/orderAnimalFragment" />
+        <action
+            android:id="@+id/action_showAnimalFragment_to_orderHistory"
+            app:destination="@id/orderHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderAnimalFragment"
+        android:name="com.example.farmhouseapp.fragments.OrderAnimalFragment"
+        android:label="fragment_order_animal"
+        tools:layout="@layout/fragment_order_animal" >
+        <action
+            android:id="@+id/action_orderAnimalFragment_to_addBillingInformation"
+            app:destination="@id/addBillingInformation" />
+        <action
+            android:id="@+id/action_orderAnimalFragment_to_chattingwithFargment"
+            app:destination="@id/chattingwithFargment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addBillingInformation"
+        android:name="com.example.farmhouseapp.fragments.AddBillingInformation"
+        android:label="fragment_add_billing_information"
+        tools:layout="@layout/fragment_add_billing_information" >
+        <action
+            android:id="@+id/action_addBillingInformation_to_orderAnimalFragment"
+            app:destination="@id/orderAnimalFragment" />
+        <action
+            android:id="@+id/action_addBillingInformation_to_showAnimalFragment"
+            app:destination="@id/showAnimalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chattingwithFargment"
+        android:name="com.example.farmhouseapp.fragments.ChattingwithFargment"
+        android:label="ChattingwithFargment" >
+        <action
+            android:id="@+id/action_chattingwithFargment_to_orderAnimalFragment"
+            app:destination="@id/orderAnimalFragment" />
+        <action
+            android:id="@+id/action_chattingwithFargment_to_orderHistory"
+            app:destination="@id/orderHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderHistory"
+        android:name="com.example.farmhouseapp.fragments.OrderHistory"
+        android:label="fragment_order_history2"
+        tools:layout="@layout/fragment_order_history2" >
+        <action
+            android:id="@+id/action_orderHistory_self"
+            app:destination="@id/orderHistory" />
+    </fragment>
+</navigation>

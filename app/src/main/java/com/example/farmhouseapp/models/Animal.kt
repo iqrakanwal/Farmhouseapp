@@ -1,7 +1,6 @@
 package com.example.farmhouseapp.models
 
 class Animal {
-
     var name: String = ""
     var catagory: String = " "
     var images: String = ""

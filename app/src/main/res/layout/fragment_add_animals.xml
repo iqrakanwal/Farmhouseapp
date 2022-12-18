@@ -74,7 +74,6 @@
                 android:hint="Name of Breed"
                 android:textColorHint="@color/white"
                 android:layout_marginTop="@dimen/_15sdp"
-
                 app:hintTextColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

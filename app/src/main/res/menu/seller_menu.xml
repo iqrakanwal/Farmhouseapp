@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/addanimal"
+        android:icon="@drawable/ic_add"
+        android:title="Add Animal" />
+
+    <item
+        android:id="@+id/farmrating"
+        android:icon="@drawable/ic_add"
+        android:title="Farms rating" />
+
+    <item
+        android:id="@+id/edtifarm"
+        android:icon="@drawable/ic_add"
+        android:title="Edti Farms" />
+
+
+</menu>

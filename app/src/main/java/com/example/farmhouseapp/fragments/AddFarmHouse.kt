@@ -12,14 +12,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.models.FarmName
 import com.example.farmhouseapp.viewmodels.MainViewModel
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_add_farm_house.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 import java.util.*
 
 
@@ -87,6 +88,7 @@ class AddFarmHouse : Fragment() {
                 farmName.phoneNo = phone_et_farm.text.toString()
                 farmName.coverProfile = "No image"
                 farmName.profileImages = "No image"
+                farmName.farmOwner = "No image"
                 adViewModel.addFarm(farmName, ::Done)
             }
 
@@ -110,11 +112,10 @@ class AddFarmHouse : Fragment() {
             val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
             val picturePath = columnIndex?.let { cursor?.getString(it) }
             coverpath = picturePath.toString()
-
-            uploadImage(coverpath.toString())
+            uploadImage(File(coverpath.toString()).toUri())
             cursor?.close()
             Toast.makeText(requireContext(), "xjhjhfdfh${picturePath}", Toast.LENGTH_SHORT).show()
-            cover.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+            cover.setImageBitmap(BitmapFactory.decodeFile(File(coverpath.toString()).toString()))
 
             /* Glide
                  .with(requireContext())
@@ -134,10 +135,9 @@ class AddFarmHouse : Fragment() {
             val picturePath = columnIndex?.let { cursor?.getString(it) }
             cursor?.close()
             profileId = picturePath.toString()
-            uploadImage(profileId.toString())
-
+            uploadImage(File(profileId.toString()).toUri())
             Toast.makeText(requireContext(), "xjhjhfdfh${picturePath}", Toast.LENGTH_SHORT).show()
-            profileimagefarm.setImageBitmap(BitmapFactory.decodeFile(profileId))
+            profileimagefarm.setImageBitmap(BitmapFactory.decodeFile(File(profileId.toString()).toString()))
 
             /* Glide
                  .with(requireContext())
@@ -157,7 +157,7 @@ class AddFarmHouse : Fragment() {
     }
 
 
-    private fun uploadImage(filePath: String) {
+    private fun uploadImage(filePath: Uri) {
         adViewModel.uploadImage(filePath, ::ImageUploaded, requireContext())
     }
 

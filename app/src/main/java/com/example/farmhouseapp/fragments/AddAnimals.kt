@@ -48,8 +48,6 @@ class AddAnimals : Fragment(), AdapterView.OnItemSelectedListener {
             false
         )
     }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adViewModel.getAllFarms {
@@ -74,9 +72,7 @@ class AddAnimals : Fragment(), AdapterView.OnItemSelectedListener {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
-
         addAnimal.setOnClickListener {
-
             if (TextUtils.isEmpty(nameofanimal_et.getText())) {
                 nameofanimal_et.setError("required")
                 nameofanimal_et.requestFocus()

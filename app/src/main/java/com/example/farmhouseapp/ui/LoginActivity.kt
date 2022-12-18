@@ -1,15 +1,17 @@
-package com.example.farmmanagment.ui
-
+package com.example.farmhouseapp.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.farmhouseapp.R
-import com.example.farmhouseapp.ui.MainScreen
-import com.example.farmhouseapp.ui.SignUpForm
+import com.example.farmhouseapp.SharedPreferencesUtils
+import com.example.farmhouseapp.UserAccount
 import com.example.farmhouseapp.utils.Constants
 import com.example.farmhouseapp.models.User
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
+import com.example.farmhouseapp.utils.Constants.Companion.senderid
+import com.example.farmhouseapp.utils.Constants.Companion.users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -23,6 +25,8 @@ class LoginActivity : AppCompatActivity() {
     private var mFirebaseUser: FirebaseUser? = null
     private var mFirebaseInstance: FirebaseDatabase? = null
     private var arraylist: ArrayList<User>? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -37,17 +41,58 @@ class LoginActivity : AppCompatActivity() {
             )
                 ?.addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                     //   Toast.makeText(this, "${task.result.user?.email}", Toast.LENGTH_SHORT ).show()
+                        //   Toast.makeText(this, "${task.result.user?.email}", Toast.LENGTH_SHORT ).show()
                         arraylist?.clear()
-                        mFirebaseDatabase?.child("user")?.get()?.addOnSuccessListener { it ->
-                            val day: User? = it.getValue(User::class.java)
-                            arraylist?.add(day!!);
+                        mFirebaseDatabase?.child("${users}")?.get()?.addOnSuccessListener { it ->
+                            Log.e("jckx", "${it.children}")
+                            it.children
+                            for (it in it.getChildren()) {
+                                val day: User? = it.getValue(User::class.java)
+                                SharedPreferencesUtils.setUserRole(this, day?.role!!)
+                                Log.e("dsfkjsdf", "${day?.name}")
+                                Log.e("dsfkjsdf", "${day?.role}")
+                                Log.e("dsfkjsdf", "${day?.email}")
+
+                                arraylist?.add(day!!);
+
+                            }
+                            Toast.makeText(
+                                this,
+                                "${SharedPreferencesUtils.getUserRole(this)}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             for (d in arraylist!!) {
                                 if (d.email == task.result.user?.email) {
+                                    SharedPreferencesUtils.setFirstName(this, d.name)
+                                    SharedPreferencesUtils.setUserEmail(this, d.email)
+                                    userAccount = UserAccount()
+                                    userAccount.userName = d.name
+                                    userAccount.phone = d.mobile_num
+                                    userAccount.email = d.email
+                                    userAccount.password = d.password
+                                    userAccount.role = d.role
                                     Constants.userEmail = task.result.user?.email!!
                                     Constants.userRole = d.role
+                                    SharedPreferencesUtils.setUserRole(this, d.role)
+
+
+
+                                    /*    Constants.mainUser.name = d.name
+                                        Constants.mainUser.password = d.password
+                                        Constants.mainUser.mobile_num = d.mobile_num
+                                        Constants.mainUser.role = d.role
+                                        Constants.mainUser.email = d.email*/
+                                    Toast.makeText(
+                                        this,
+                                        "${SharedPreferencesUtils.getFirstName(this)}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
                                 }
                             }
+
+                            SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
+                            // mAuth?.currentUser?.email
                             startActivity(Intent(this, MainScreen::class.java))
                             finish()
                         }?.addOnFailureListener {
@@ -95,16 +140,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-  /*  fun getUsersData() {
+    /*  fun getUsersData() {
 
-        Toast.makeText(this, "${database.child("user").key}", Toast.LENGTH_SHORT).show()
-        database.child("user").get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value}")
-        }.addOnFailureListener {
-            Log.e("firebase", "Error getting data", it)
-        }
+          Toast.makeText(this, "${database.child("user").key}", Toast.LENGTH_SHORT).show()
+          database.child("user").get().addOnSuccessListener {
+              Log.i("firebase", "Got value ${it.value}")
+          }.addOnFailureListener {
+              Log.e("firebase", "Error getting data", it)
+          }
 
-    }
-*/
+      }
+  */
 
 }

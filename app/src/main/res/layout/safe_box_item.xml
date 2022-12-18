@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="@dimen/_10sdp"
+    android:id="@+id/item"
     android:background="@drawable/roundedcorner"
     android:layout_height="wrap_content">
 

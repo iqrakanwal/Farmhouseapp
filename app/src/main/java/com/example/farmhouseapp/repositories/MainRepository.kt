@@ -1,25 +1,31 @@
 package com.example.farmhouseapp.repositories
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.example.farmhouseapp.Possibilities
-import com.example.farmhouseapp.models.Animal
-import com.example.farmhouseapp.models.FarmName
-import com.example.farmhouseapp.models.User
+import com.example.farmhouseapp.models.*
 import com.example.farmhouseapp.utils.Constants
+import com.example.farmhouseapp.utils.Constants.Companion.animals
+import com.example.farmhouseapp.utils.Constants.Companion.doctors
+import com.example.farmhouseapp.utils.Constants.Companion.farms
+import com.example.farmhouseapp.utils.Constants.Companion.orders
+import com.example.farmhouseapp.utils.Constants.Companion.users
+import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import java.util.*
 
 
 class MainRepository(var context: Context) {
     private var mFirebaseInstance: FirebaseDatabase? = FirebaseDatabase.getInstance()
     private var mFirebaseDatabase: DatabaseReference? = mFirebaseInstance?.getReference()
-    private lateinit var farms: ArrayList<FarmName>
+    private lateinit var farmsd: ArrayList<FarmName>
+    private lateinit var animalslist: ArrayList<Animal?>
 
 
     var storage: FirebaseStorage? = FirebaseStorage.getInstance();
@@ -31,7 +37,7 @@ class MainRepository(var context: Context) {
         user.role = role
         user.email = email
         user.password = Constants.adminPassword
-        mFirebaseDatabase?.ref?.child("user")?.push()?.setValue(user)?.addOnSuccessListener {
+        mFirebaseDatabase?.ref?.child("${users}")?.push()?.setValue(user)?.addOnSuccessListener {
             Log.e("addUser", "add")
             // startActivity(Intent(this@SignUpForm, MainScreen::class.java))
             // finish()
@@ -53,8 +59,8 @@ class MainRepository(var context: Context) {
     }
 
 
-    fun addAnimal(animals: Animal, callback: (String) -> Unit) {
-        mFirebaseDatabase?.ref?.child("Animals")?.push()?.setValue(animals)
+    fun addAnimal(animals1: Animal, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${animals}")?.push()?.setValue(animals1)
             ?.addOnSuccessListener {
                 callback("done")
             }?.addOnFailureListener {
@@ -75,7 +81,7 @@ class MainRepository(var context: Context) {
     }
 
     fun insertFarm(farmName: FarmName, callback: (String) -> Unit) {
-        mFirebaseDatabase?.ref?.child("Farms")?.push()?.setValue(farmName)
+        mFirebaseDatabase?.ref?.child("${farms}")?.push()?.setValue(farmName)
             ?.addOnSuccessListener {
                 callback("done")
             }?.addOnFailureListener {
@@ -85,17 +91,17 @@ class MainRepository(var context: Context) {
 
 
     fun getAllFarms(callback: (ArrayList<FarmName>) -> Unit) {
-        farms = arrayListOf()
-        mFirebaseDatabase?.ref?.child("Farms")?.get()?.addOnSuccessListener {
-            for ( it in it.getChildren()) {
+        farmsd = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${farms}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
                 val day: FarmName = it.getValue(FarmName::class.java)!!
-                farms.add(day)
+                farmsd.add(day)
             }
-           // Log.e("cvjlxkcvjl", "${it}")
+            // Log.e("cvjlxkcvjl", "${it}")
 
-           // val day: FarmName = it.getValue(FarmName::class.java)!!
-        //    farms?.add(day)
-            callback(farms)
+            // val day: FarmName = it.getValue(FarmName::class.java)!!
+            //    farms?.add(day)
+            callback(farmsd)
 
 
         }
@@ -135,32 +141,166 @@ class MainRepository(var context: Context) {
 
     }
 
-    fun uploadImage(filePath: String, callback: (String) -> Unit, context: Context) {
-        if (filePath != null) {
-            val progressDialog = ProgressDialog(context)
-            progressDialog.setTitle("Uploading...")
-            progressDialog.show()
-            val ref: StorageReference? =
-                storageReference?.child("images/mountains.jpg")
-            ref?.putFile(Uri.parse(filePath))
-                ?.addOnSuccessListener {
-                    callback("${Possibilities.SUCCESS}")
-                    progressDialog.dismiss()
+    fun uploadImage(bitmap: Uri, callback: (String) -> Unit, context: Context) {
+        Log.e("referece", "${storageReference.toString()}")
+        if (bitmap != null) {
+            if (bitmap != null) {
+                val ref = storageReference?.child("uploads/" + UUID.randomUUID().toString())
+                val uploadTask = ref?.putFile(bitmap!!)
+
+                val urlTask =
+                    uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>>
+                    { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        return@Continuation ref.downloadUrl
+                    })?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUri = task.result
+                            callback("${downloadUri}")
+                            //Toast.makeText(this,"${downloadUri}", Toast.LENGTH_SHORT).show()
+                            //addUploadRecordToDb(downloadUri.toString())
+                        } else {
+                            // Handle failures
+                        }
+                    }
+                        ?.addOnFailureListener {
+                            callback("${Possibilities.FAILED}")
+                        }
+
+            }
+
+        }
+
+    }
+
+    fun getSellerFarm(user: String?, callback: (FarmName) -> Unit) {
+        var array: ArrayList<FarmName> = arrayListOf()
+        var farmName: FarmName
+        mFirebaseDatabase?.child("$farms")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: FarmName = it.getValue(FarmName::class.java)!!
+                array.add(day)
+            }
+            for (it in array) {
+                if ((it.farmOwner == user)) {
+                    callback(it)
                 }
-                ?.addOnFailureListener { e ->
-                    progressDialog.dismiss()
-                    callback("${Possibilities.SUCCESS}")
+            }
+
+        }?.addOnFailureListener {
+
+
+        }
+    }
+
+    fun getAnimalOfFarm(farmName: String, list: (ArrayList<Animal?>) -> Unit) {
+        animalslist = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${animals}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Animal = it.getValue(Animal::class.java)!!
+                if (day.farmName == farmName) {
+                    animalslist.add(day)
 
                 }
-                ?.addOnProgressListener { taskSnapshot ->
-                    val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot
-                        .totalByteCount
-                    progressDialog.setMessage("Uploaded " + progress.toInt() + "%")
-                }
+
+            }
+            list(animalslist)
         }
     }
 
 
+    fun getAllAnimalS(list: (ArrayList<Animal>) -> Unit) {
+        var animals: ArrayList<Animal> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.animals}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Animal = it.getValue(Animal::class.java)!!
+                animals.add(day)
+
+            }
+            list(animals)
+        }
+
+
+    }
+
+    fun getFarmFromAnimal(animal: String, callback: (FarmName) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${farms}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: FarmName = it.getValue(FarmName::class.java)!!
+                if (day.name == animal) {
+                    callback(day)
+                }
+            }
+
+
+            // Log.e("cvjlxkcvjl", "${it}")
+
+            // val day: FarmName = it.getValue(FarmName::class.java)!!
+            //    farms?.add(day)
+
+
+        }
+    }
+
+    fun addDoctor(doctor: Doctor, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${doctors}")?.push()?.setValue(doctor)
+            ?.addOnSuccessListener {
+                callback("done")
+            }?.addOnFailureListener {
+                callback("failed")
+            }
+    }
+
+    fun getDoctor(
+        userEmail: String?,
+        firstName: String?,
+        callback: (Doctor?) -> Unit
+    ) {
+        mFirebaseDatabase?.ref?.child("${doctors}")?.get()?.addOnSuccessListener {
+            if (it.value != null) {
+                for (it in it.getChildren()) {
+                    val day: Doctor = it.getValue(Doctor::class.java)!!
+                    if ((day.name == firstName) && (day.email == userEmail)) {
+                        callback(day)
+                    }
+                }
+            } else {
+                callback(null)
+            }
+
+
+        }?.addOnFailureListener {
+            callback(null)
+
+        }
+
+
+    }
+
+    fun placeOrder(order: Orders, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${orders}")?.push()?.setValue(order)
+            ?.addOnSuccessListener {
+                callback("${Possibilities.SUCCESS}")
+            }?.addOnFailureListener {
+                callback("${Possibilities.FAILED}")
+            }
+
+    }
+
+    fun getAllOrders(list: (ArrayList<Orders>) -> Unit) {
+        var orders: ArrayList<Orders> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.orders}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Orders = it.getValue(Orders::class.java)!!
+                orders.add(day)
+            }
+            list(orders)
+        }
+    }
 }
 
 

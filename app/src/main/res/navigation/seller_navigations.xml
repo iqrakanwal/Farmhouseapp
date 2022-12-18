@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/seller_navigations"
+    app:startDestination="@id/showFarmFragment">
+
+
+
+    <fragment
+        android:id="@+id/edtiFarmsFragment"
+        android:name="com.example.farmhouseapp.fragments.EdtiFarmsFragment"
+        android:label="fragment_edti_farms"
+        tools:layout="@layout/fragment_edti_farms" >
+        <action
+            android:id="@+id/action_edtiFarmsFragment_to_showFarmFragment"
+            app:destination="@id/showFarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showFarmFragment"
+        android:name="com.example.farmhouseapp.fragments.ShowFarmFragment"
+        android:label="fragment_show_farm"
+        tools:layout="@layout/fragment_show_farm" >
+        <action
+            android:id="@+id/action_showFarmFragment_to_edtiFarmsFragment"
+            app:destination="@id/edtiFarmsFragment" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_addAnimalinSeller"
+            app:destination="@id/addAnimalinSeller" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_addFarmInSeller"
+            app:destination="@id/addFarmInSeller" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_chatWithSellerForSeller"
+            app:destination="@id/chatWithSellerForSeller" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/addAnimalinSeller"
+        android:name="com.example.farmhouseapp.fragments.AddAnimalinSeller"
+        android:label="fragment_add_animalin_seller"
+        tools:layout="@layout/fragment_add_animalin_seller" >
+        <action
+            android:id="@+id/action_addAnimalinSeller_to_showFarmFragment"
+            app:destination="@id/showFarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFarmInSeller"
+        android:name="com.example.farmhouseapp.fragments.AddFarmInSeller"
+        android:label="fragment_add_farm_in_seller"
+        tools:layout="@layout/fragment_add_farm_in_seller" >
+        <action
+            android:id="@+id/action_addFarmInSeller_to_showFarmFragment"
+            app:destination="@id/showFarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatWithSellerForSeller"
+        android:name="com.example.farmhouseapp.fragments.ChatWithSellerForSeller"
+        android:label="fragment_chat_with_seller_for_seller"
+        tools:layout="@layout/fragment_chat_with_seller_for_seller" />
+</navigation>

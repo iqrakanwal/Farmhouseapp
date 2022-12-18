@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_30sdp"
-        android:text="Welcome to Farm Managment"
+        android:text="Welcome to Farm Management"
         android:textColor="@color/white"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
@@ -34,7 +34,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/doctor"
+        app:layout_constraintBottom_toTopOf="@+id/seller"
         tools:layout_editor_absoluteX="-16dp" />
 
     <Button
@@ -77,7 +77,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/admin"
+        app:layout_constraintBottom_toTopOf="@+id/doctor"
         tools:layout_editor_absoluteX="16dp" />
 
 

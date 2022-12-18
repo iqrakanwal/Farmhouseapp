@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@drawable/bg"
     tools:context=".ui.SignUpForm">
 
@@ -88,8 +87,8 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:background="@drawable/edtitext_bg"
-                android:hint="Enter Email"
                 android:padding="@dimen/_2sdp"
+
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

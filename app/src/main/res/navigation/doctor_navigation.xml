@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/doctor_navigation"
+    app:startDestination="@id/doctorMainPage">
+
+    <fragment
+        android:id="@+id/addDoctor2"
+        android:name="com.example.farmhouseapp.fragments.AddDoctor"
+        android:label="fragment_add_doctor"
+        tools:layout="@layout/fragment_add_doctor" >
+        <action
+            android:id="@+id/action_addDoctor2_to_doctorMainPage"
+            app:destination="@id/doctorMainPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorMainPage"
+        android:name="com.example.farmhouseapp.fragments.DoctorMainPage"
+        android:label="fragment_doctor_main_page"
+        tools:layout="@layout/fragment_doctor_main_page" >
+        <action
+            android:id="@+id/action_doctorMainPage_to_addDoctor2"
+            app:destination="@id/addDoctor2" />
+    </fragment>
+</navigation>

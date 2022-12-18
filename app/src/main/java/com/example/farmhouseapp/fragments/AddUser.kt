@@ -14,8 +14,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class AddUser : Fragment() {
-
-
     private val adViewModel: MainViewModel by sharedViewModel()
 
 

@@ -11,8 +11,12 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.farmhouseapp.R
+import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.Users
 import com.example.farmhouseapp.models.User
+import com.example.farmhouseapp.utils.Constants
+import com.example.farmhouseapp.utils.Constants.Companion.senderid
+import com.example.farmhouseapp.utils.Constants.Companion.users
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.*
@@ -105,14 +109,29 @@ class SignUpForm : AppCompatActivity() {
                             user.name = name_et.getText().toString()
                             user.mobile_num = phone_num_et.getText().toString()
                             user.password = password_et.getText().toString()
-
-                            if(userSelected!=null){
+                            if (userSelected != null) {
                                 user.role = userSelected
                             }
                             user.email = email_et.getText().toString()
-                            FirebaseDatabase.getInstance().reference.child("user").push()
+                            SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
+
+                            FirebaseDatabase.getInstance().reference.child("${users}").push()
                                 .setValue(user)
                                 .addOnSuccessListener {
+                                    SharedPreferencesUtils.setFirstName(
+                                        this,
+                                        name_et.getText().toString()
+                                    )
+                                    SharedPreferencesUtils.setUserRole(
+                                        this,
+                                        userSelected)
+                                    SharedPreferencesUtils.setUserEmail(
+                                        this,
+                                        email_et.getText().toString()
+                                    )
+
+                                    SharedPreferencesUtils.setUserPhone(this,
+                                        phone_num_et.getText().toString())
                                     Toast.makeText(
                                         applicationContext,
                                         "Signup Sucessfully",
@@ -130,12 +149,9 @@ class SignUpForm : AppCompatActivity() {
 
 
                             //   updateUI(user)
-                        } else {
-                            // If sign in fails, display a message to the user.
+                        } else if(task.isCanceled) {
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(
-                                baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT
+                            Toast.makeText(baseContext, "Authentication failed. ${task.exception}}", Toast.LENGTH_SHORT
                             ).show()
                             //updateUI(null)
                         }
