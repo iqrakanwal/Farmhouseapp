@@ -6,23 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.farmhouseapp.AnimalAdaptor
 import com.example.farmhouseapp.OrdersAdaptor
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
-import com.example.farmhouseapp.models.Animal
 import com.example.farmhouseapp.models.Orders
-import com.example.farmhouseapp.ui.FirstScreen
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_order_history2.*
-import kotlinx.android.synthetic.main.fragment_show_animal.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.ArrayList
 
-
-class OrderHistory : Fragment() {
+class YourOrders : Fragment() {
     private val adViewModel: MainViewModel by sharedViewModel()
     lateinit var ordersAdaptor: OrdersAdaptor
     var arrayList: ArrayList<Orders?> = arrayListOf()
@@ -37,13 +34,13 @@ class OrderHistory : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order_history2, container, false)
+        return inflater.inflate(R.layout.fragment_your_orders, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         layout = LinearLayoutManager(requireContext())
-        adViewModel.getOrderFromBuyer(FirstScreen.userAccount.userName) {
+        adViewModel.getOrderfromSeller("${userAccount.userName}") {
             if (it.size == null) {
                 Toast.makeText(requireContext(), "Not Available", Toast.LENGTH_SHORT).show()
             } else {
@@ -60,11 +57,12 @@ class OrderHistory : Fragment() {
 
 
         }
-
-
     }
 
     private fun itemCliked(orders: Orders) {
+        adViewModel.setOrder(orders)
+        findNavController().navigate(R.id.action_yourOrders_to_orderdetail)
+
 
     }
 

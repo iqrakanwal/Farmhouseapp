@@ -7,106 +7,78 @@
     android:background="@drawable/bg"
     tools:context=".AdminMainScreen">
 
-    <Button
-        android:id="@+id/addAnimal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/farmer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Add Animal"
-        android:textAllCaps="false"
+        android:text="Farmer"
+        android:textSize="@dimen/_20sdp"
+
+        android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/addFarm"
+        app:layout_constraintBottom_toTopOf="@+id/seller"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/buyyerstext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buyyer:"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buyers"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seller" />
+
+    <TextView
+        android:id="@+id/dcotoertext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Doctors:"
+        app:layout_constraintBottom_toTopOf="@+id/doctor"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sdp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buyers" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/seller"
+        android:layout_width="0dp"
+        android:layout_margin="@dimen/_3sdp"
+
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/buyyerstext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-    <Button
-        android:id="@+id/addFarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Add Farm"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/edtiFarm"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/farmer" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/buyers"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/dcotoertext"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_3sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/edtiFarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Edit Farm"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/deleteFarm"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <Button
-        android:id="@+id/deleteFarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Delete Farm"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/addbuyer"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buyyerstext" />
 
 
-    <Button
-        android:id="@+id/addbuyer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Add Buyer"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/addseller"
-        tools:layout_editor_absoluteX="16dp" />
-
-
-    <Button
-        android:id="@+id/addseller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Add Seller"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toTopOf="@+id/adddoctor"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <Button
-        android:id="@+id/adddoctor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/button_shape_pink"
-        android:onClick="onBecomeAWorkerClicked"
-        android:text="Add Doctor"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_15sdp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/doctor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_3sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dcotoertext" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

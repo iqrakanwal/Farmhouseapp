@@ -9,6 +9,8 @@ class Constants {
     companion object {
         var userEmail = ""
         var userRole = ""
+        var userType= ""
+        var adminEmail= "admin@gmail.com"
         var adminPassword = "admin1234"
         var users:String= "USERS"
         var farms:String= "FARMS"

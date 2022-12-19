@@ -4,20 +4,26 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.farmhouseapp.models.Animal
-import com.example.farmhouseapp.models.Doctor
-import com.example.farmhouseapp.models.FarmName
-import com.example.farmhouseapp.models.Orders
+import com.example.farmhouseapp.models.*
 import com.example.farmhouseapp.repositories.MainRepository
+import com.google.firestore.v1.StructuredQuery.Order
 
 class MainViewModel(var repository: MainRepository) : ViewModel() {
     var userTile: MutableLiveData<String>? = MutableLiveData()
     var userType: MutableLiveData<String>? = MutableLiveData()
 
     lateinit var animalObject: Animal
+    lateinit var orderforDetail: Orders
     lateinit var farmObject: FarmName
-    fun addUser(name: String, num: String, role: String, email: String, password: String) {
-        repository.addUser(name, num, role, email, password)
+    fun addUser(
+        name: String,
+        num: String,
+        role: String,
+        email: String,
+        password: String,
+        callback: (String) -> Unit
+    ) {
+        repository.addUser(name, num, role, email, password, callback)
     }
 
     fun setAnimal(animal1: Animal) {
@@ -87,6 +93,7 @@ class MainViewModel(var repository: MainRepository) : ViewModel() {
     fun getAllAnimals(list: (ArrayList<Animal>) -> Unit) {
         repository.getAllAnimalS(list)
     }
+
     fun getAllOrders(list: (ArrayList<Orders>) -> Unit) {
         repository.getAllOrders(list)
     }
@@ -114,8 +121,33 @@ class MainViewModel(var repository: MainRepository) : ViewModel() {
     }
 
     fun placeOrder(order: Orders, callback: (String) -> Unit) {
-repository.placeOrder(order,callback )
+        repository.placeOrder(order, callback)
     }
 
+    fun getOrderFromBuyer(firstName: String?, list: (ArrayList<Orders>) -> Unit) {
+        repository.getOrderFromBuyer(firstName, list)
+    }
+
+    fun getAllUsers(userName: String, list: (ArrayList<User>) -> Unit) {
+        repository.getAllUser(userName, list)
+
+    }
+
+    fun getOrderfromSeller(firstName: String?, list: (ArrayList<Orders>) -> Unit) {
+        repository.getOrderfromSeller(firstName, list)
+    }
+
+    fun setOrder(orders: Orders) {
+        orderforDetail = orders
+    }
+
+
+    fun getOrder(): Orders? {
+        return orderforDetail;
+    }
+
+    fun updateOrder(order: String?, callback: (String) -> Unit) {
+repository?.updateOrder(order, callback)
+    }
 
 }

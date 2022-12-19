@@ -1,5 +1,6 @@
 package com.example.farmhouseapp.fragments
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.BitmapFactory
@@ -21,16 +22,21 @@ import com.example.farmhouseapp.R
 import com.example.farmhouseapp.models.Animal
 import com.example.farmhouseapp.models.FarmName
 import com.example.farmhouseapp.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.fragment_add_animalin_seller.*
 import kotlinx.android.synthetic.main.fragment_add_animals.*
 import kotlinx.android.synthetic.main.fragment_add_animals.nameofanimal_et
 import kotlinx.android.synthetic.main.fragment_add_animals.view.*
 import kotlinx.android.synthetic.main.fragment_add_farm_house.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.IOException
 
 
 class AddAnimals : Fragment(), AdapterView.OnItemSelectedListener {
     private val adViewModel: MainViewModel by sharedViewModel()
     val PICK_IMAGE = 1
+    private var progressDailog: ProgressDialog? = null
+    var animalFilePath: Uri? = null
+
     lateinit var farmName: ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +56,8 @@ class AddAnimals : Fragment(), AdapterView.OnItemSelectedListener {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDailog = ProgressDialog(requireContext())
+
         adViewModel.getAllFarms {
             farmName = arrayListOf()
             Toast.makeText(requireContext(), "${it.size}", Toast.LENGTH_SHORT).show()
@@ -86,38 +94,68 @@ class AddAnimals : Fragment(), AdapterView.OnItemSelectedListener {
                 price_et.setError("required")
                 price_et.requestFocus()
             } else {
-                var animals = Animal()
-                animals.name = nameofanimal_et.text.toString()
-                animals.catagory = nameofbreed_et.text.toString()
-                animals.farmName = farm.getSelectedItem().toString()
-                animals.price = price_et.text.toString()
-                animals.images = "no images"
-                animals.quantity = qunatityofanimal_et.text.toString()
-                adViewModel.adAnimal(animals, ::Done)
+                progressDailog?.show()
+                uploadProfileImage(animalFilePath!!)
+
+
             }
         }
+    }
+    private fun uploadProfileImage(filePath: Uri) {
+        adViewModel.uploadImage(filePath, ::uploadedProfilePhoto, requireContext())
+    }
+
+    private fun uploadedProfilePhoto(s: String) {
+        var animals = Animal()
+        animals.name = nameofanimal_et.text.toString()
+        animals.catagory = nameofbreed_et.text.toString()
+        animals.farmName = farm.getSelectedItem().toString()
+        animals.price = price_et.text.toString()
+        animals.images = s
+        animals.quantity = qunatityofanimal_et.text.toString()
+        adViewModel.adAnimal(animals, ::Done)
     }
 
     private fun Done(s: String) {
         Toast.makeText(requireContext(), "${s}", Toast.LENGTH_SHORT).show()
+        progressDailog?.dismiss()
         findNavController().navigate(R.id.action_addAnimals_to_adminMainScreen)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PICK_IMAGE) {
-            val selectedImage = data?.data
-            Toast.makeText(requireContext(), "xjhjhfdfh${selectedImage}", Toast.LENGTH_SHORT).show()
-            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor: Cursor? = requireContext().getContentResolver().query(
-                Uri.parse(selectedImage.toString()),
-                filePathColumn, null, null, null
-            )
-            cursor?.moveToFirst()
-            val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
-            val picturePath = columnIndex?.let { cursor?.getString(it) }
-            cursor?.close()
-            Toast.makeText(requireContext(), "xjhjhfdfh${picturePath}", Toast.LENGTH_SHORT).show()
-            profile_image.setImageBitmap(BitmapFactory.decodeFile(picturePath))
+            if (requestCode == PICK_IMAGE) {
+
+
+
+                if (data == null || data.data == null) {
+                    return
+                }
+                animalFilePath = data.data
+                try {
+                    val bitmap =
+                        MediaStore.Images.Media.getBitmap(requireContext().contentResolver, animalFilePath)
+                    profile_image.setImageBitmap(bitmap);
+                    // uploadImage(coverFilePath!!)
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                /* val selectedImage = data?.data
+                 Toast.makeText(requireContext(), "xjhjhfdfh${selectedImage}", Toast.LENGTH_SHORT).show()
+                 val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+                 val cursor: Cursor? = requireContext().getContentResolver().query(
+                     Uri.parse(selectedImage.toString()),
+                     filePathColumn, null, null, null
+                 )
+                 cursor?.moveToFirst()
+                 val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+                 val picturePath = columnIndex?.let { cursor?.getString(it) }
+                 cursor?.close()*/
+                /*  Toast.makeText(requireContext(), "xjhjhfdfh${picturePath}", Toast.LENGTH_SHORT).show()
+                  profile_image.setImageBitmap(BitmapFactory.decodeFile(picturePath))*/
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.farmhouseapp.fragments
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.BitmapFactory
@@ -25,10 +26,14 @@ import java.io.IOException
 
 
 class AddAnimalinSeller : Fragment() {
+
+    private var progressDailog: ProgressDialog? = null
+
+
+
     private val adViewModel: MainViewModel by sharedViewModel()
     val PICK_IMAGE = 1
     var animalpath: String?= ""
-
     var animalFilePath: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,7 @@ class AddAnimalinSeller : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDailog = ProgressDialog(requireContext())
 
 
         addimageseller.setOnClickListener {
@@ -70,6 +76,7 @@ class AddAnimalinSeller : Fragment() {
                 price_et_seller.requestFocus()
             } else {
 
+                progressDailog?.show()
 
 
                 uploadProfileImage(animalFilePath!!)
@@ -81,6 +88,8 @@ class AddAnimalinSeller : Fragment() {
     }
     private fun Done(s: String) {
         Toast.makeText(requireContext(), "${s}", Toast.LENGTH_SHORT).show()
+        progressDailog?.dismiss()
+
         findNavController().navigate(R.id.action_addAnimalinSeller_to_showFarmFragment)
     }
 

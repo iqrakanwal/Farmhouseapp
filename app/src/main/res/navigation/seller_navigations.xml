@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_showFarmFragment_to_chatWithSellerForSeller"
             app:destination="@id/chatWithSellerForSeller" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_yourOrders"
+            app:destination="@id/yourOrders" />
 
     </fragment>
     <fragment
@@ -58,4 +61,22 @@
         android:name="com.example.farmhouseapp.fragments.ChatWithSellerForSeller"
         android:label="fragment_chat_with_seller_for_seller"
         tools:layout="@layout/fragment_chat_with_seller_for_seller" />
+    <fragment
+        android:id="@+id/yourOrders"
+        android:name="com.example.farmhouseapp.fragments.YourOrders"
+        android:label="fragment_your_orders"
+        tools:layout="@layout/fragment_your_orders" >
+        <action
+            android:id="@+id/action_yourOrders_to_orderdetail"
+            app:destination="@id/orderdetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderdetail"
+        android:name="com.example.farmhouseapp.fragments.Orderdetail"
+        android:label="fragment_orderdetail"
+        tools:layout="@layout/fragment_orderdetail" >
+        <action
+            android:id="@+id/action_orderdetail_to_showFarmFragment"
+            app:destination="@id/showFarmFragment" />
+    </fragment>
 </navigation>

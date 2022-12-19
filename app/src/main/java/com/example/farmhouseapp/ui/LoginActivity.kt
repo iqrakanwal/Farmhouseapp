@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.UserAccount
+import com.example.farmhouseapp.Users
+import com.example.farmhouseapp.models.Orders
 import com.example.farmhouseapp.utils.Constants
 import com.example.farmhouseapp.models.User
 import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
@@ -16,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_sign_up_form.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -47,52 +50,19 @@ class LoginActivity : AppCompatActivity() {
                             Log.e("jckx", "${it.children}")
                             it.children
                             for (it in it.getChildren()) {
-                                val day: User? = it.getValue(User::class.java)
-                                SharedPreferencesUtils.setUserRole(this, day?.role!!)
-                                Log.e("dsfkjsdf", "${day?.name}")
-                                Log.e("dsfkjsdf", "${day?.role}")
-                                Log.e("dsfkjsdf", "${day?.email}")
-
-                                arraylist?.add(day!!);
-
-                            }
-                            Toast.makeText(
-                                this,
-                                "${SharedPreferencesUtils.getUserRole(this)}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            for (d in arraylist!!) {
-                                if (d.email == task.result.user?.email) {
-                                    SharedPreferencesUtils.setFirstName(this, d.name)
-                                    SharedPreferencesUtils.setUserEmail(this, d.email)
+                                val day: User = it.getValue(User::class.java)!!
+                                if(day.email==task.result.user?.email){
                                     userAccount = UserAccount()
-                                    userAccount.userName = d.name
-                                    userAccount.phone = d.mobile_num
-                                    userAccount.email = d.email
-                                    userAccount.password = d.password
-                                    userAccount.role = d.role
-                                    Constants.userEmail = task.result.user?.email!!
-                                    Constants.userRole = d.role
-                                    SharedPreferencesUtils.setUserRole(this, d.role)
+                                    userAccount.userName = day.name
+                                    userAccount.phone = day.mobile_num
+                                    userAccount.email = day.email
+                                    userAccount.password = day.password
+                                    userAccount.role = day.role
 
-
-
-                                    /*    Constants.mainUser.name = d.name
-                                        Constants.mainUser.password = d.password
-                                        Constants.mainUser.mobile_num = d.mobile_num
-                                        Constants.mainUser.role = d.role
-                                        Constants.mainUser.email = d.email*/
-                                    Toast.makeText(
-                                        this,
-                                        "${SharedPreferencesUtils.getFirstName(this)}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
 
                                 }
                             }
-
                             SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
-                            // mAuth?.currentUser?.email
                             startActivity(Intent(this, MainScreen::class.java))
                             finish()
                         }?.addOnFailureListener {

@@ -1,5 +1,5 @@
 package com.example.farmhouseapp
 
 enum class Users {
-    BUYER, SELLER, DOCTOR
+    BUYER, SELLER, DOCTOR, ADMIN
 }

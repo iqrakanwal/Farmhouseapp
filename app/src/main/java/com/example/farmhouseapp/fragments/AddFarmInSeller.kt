@@ -1,5 +1,6 @@
 package com.example.farmhouseapp.fragments
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -22,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.FarmName
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_tactivity.*
 import kotlinx.android.synthetic.main.fragment_add_farm_in_seller.*
@@ -33,12 +35,12 @@ import java.io.IOException
 class AddFarmInSeller : Fragment() {
     val PICK_IMAGE = 1
     val PROFILE_PICK_IMAGE = 2
-    var coverpath: String?= ""
-
+    var coverpath: String? = ""
+    private var progressDailog: ProgressDialog? = null
     var coverFilePath: Uri? = null
     var profileFilePath: Uri? = null
     private val adViewModel: MainViewModel by sharedViewModel()
-     var profileId: String?=""
+    var profileId: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,7 +57,7 @@ class AddFarmInSeller : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        progressDailog = ProgressDialog(requireContext())
 
         dfseller.setOnClickListener {
             val intent = Intent()
@@ -87,16 +89,10 @@ class AddFarmInSeller : Fragment() {
                 phone_et_farm_seller.setError("required")
                 phone_et_farm_seller.requestFocus()
             } else {
-
+                progressDailog?.show()
                 uploadCoverPhotoImage(coverFilePath!!)
-
-
                 Handler().postDelayed({
-
-
                 }, 2000)
-
-
             }
 
 
@@ -115,9 +111,12 @@ class AddFarmInSeller : Fragment() {
             coverFilePath = data.data
             try {
                 val bitmap =
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, coverFilePath)
+                    MediaStore.Images.Media.getBitmap(
+                        requireContext().contentResolver,
+                        coverFilePath
+                    )
                 coverseller.setImageBitmap(bitmap);
-               // uploadImage(coverFilePath!!)
+                // uploadImage(coverFilePath!!)
 
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -132,9 +131,12 @@ class AddFarmInSeller : Fragment() {
             profileFilePath = data.data
             try {
                 val bitmap =
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, profileFilePath)
+                    MediaStore.Images.Media.getBitmap(
+                        requireContext().contentResolver,
+                        profileFilePath
+                    )
                 profileimagefarmseller.setImageBitmap(bitmap);
-               // uploadImage(profileFilePath!!)
+                // uploadImage(profileFilePath!!)
 
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -145,11 +147,11 @@ class AddFarmInSeller : Fragment() {
     }
 
     private fun Done(s: String) {
-        SharedPreferencesUtils.setFarmName(requireContext(), nameofarm_et_seller.text.toString())
         Toast.makeText(requireContext(), "${s}", Toast.LENGTH_SHORT).show()
         nameofarm_et_seller.getText()?.clear();
         locations_et_seller.getText()?.clear();
         phone_et_farm_seller.getText()?.clear();
+        progressDailog?.dismiss()
         findNavController().navigate(R.id.action_addFarmInSeller_to_showFarmFragment)
     }
 
@@ -172,7 +174,7 @@ class AddFarmInSeller : Fragment() {
         farmName.phoneNo = phone_et_farm_seller.text.toString()
         farmName.coverProfile = coverpath.toString()
         farmName.profileImages = profileId.toString()
-        farmName.farmOwner = SharedPreferencesUtils.getFirstName(requireContext()).toString()
+        farmName.farmOwner = userAccount.userName
         adViewModel.addFarm(farmName, ::Done)
     }
 
@@ -180,14 +182,10 @@ class AddFarmInSeller : Fragment() {
     private fun ImageUploaded(s: String) {
 
 
-
         Toast.makeText(requireContext(), "${coverpath}", Toast.LENGTH_SHORT).show()
         coverpath = s
-
         uploadProfileImage(profileFilePath!!)
         Toast.makeText(requireContext(), "${coverpath}", Toast.LENGTH_SHORT).show()
-
-
 
 
     }

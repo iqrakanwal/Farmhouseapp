@@ -114,7 +114,6 @@ class SignUpForm : AppCompatActivity() {
                             }
                             user.email = email_et.getText().toString()
                             SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
-
                             FirebaseDatabase.getInstance().reference.child("${users}").push()
                                 .setValue(user)
                                 .addOnSuccessListener {

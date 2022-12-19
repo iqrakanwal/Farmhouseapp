@@ -14,6 +14,7 @@ import com.example.farmhouseapp.Possibilities
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Orders
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_animals.*
 import kotlinx.android.synthetic.main.fragment_add_billing_information.*
@@ -46,7 +47,7 @@ class AddBillingInformation : Fragment() {
         productname.text = adViewModel.getAnimal().name
         productprice.text = adViewModel.getAnimal().price
         productbreed.text = adViewModel.getAnimal().catagory
-        username.text = SharedPreferencesUtils.getFirstName(requireContext())
+        username.text = userAccount.userName
         email.text = SharedPreferencesUtils.getUserEmail(requireContext())
         phone_num.text = ""
         user_address_et.text
@@ -61,7 +62,7 @@ class AddBillingInformation : Fragment() {
                 order.ownerName = adViewModel.getFarm().farmOwner
                 order.totalAmount = adViewModel.getAnimal().price
                 order.orderstatus = "${OrderStatus.PENDING}"
-                order.buyerName = SharedPreferencesUtils.getFirstName(requireContext()).toString()
+                order.buyerName = userAccount.userName
                 adViewModel.placeOrder(order, ::Done)
             }
         }

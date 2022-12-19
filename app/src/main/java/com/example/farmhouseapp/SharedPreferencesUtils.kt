@@ -6,18 +6,6 @@ import android.content.SharedPreferences
 
 object SharedPreferencesUtils {
 
-    fun getFirstTime(mContext: Context): Boolean {
-        val sharedPreferences: SharedPreferences =
-            mContext.getSharedPreferences("firstrime", Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isFirsttime", true)
-    }
-
-
-    fun getFirstName(mContext: Context): String? {
-        val sharedPreferences: SharedPreferences =
-            mContext.getSharedPreferences("firstname", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("name", "")
-    }
 
     fun setFirstName(mContext: Context, mValue: String?) {
         val sharedPreferences: SharedPreferences = mContext.getSharedPreferences("firstname", Context.MODE_PRIVATE)

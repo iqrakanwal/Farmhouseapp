@@ -1,12 +1,16 @@
 package com.example.farmhouseapp.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.farmhouseapp.Possibilities
 import com.example.farmhouseapp.R
+import com.example.farmhouseapp.utils.Constants.Companion.userType
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_user.*
 import kotlinx.android.synthetic.main.fragment_add_user.phone_num_et
@@ -15,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AddUser : Fragment() {
     private val adViewModel: MainViewModel by sharedViewModel()
-
+private var progressDailog:ProgressDialog?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +38,8 @@ class AddUser : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (adViewModel.userTile != null)
-            addwhat.text = adViewModel.getTitle()
-
-
-
-
-
+        progressDailog= ProgressDialog(requireContext())
+        role_et.text = userType
         add.setOnClickListener {
 
             if (TextUtils.isEmpty(name_user.getText())) {
@@ -53,18 +52,30 @@ class AddUser : Fragment() {
                 email_et_user.setError("required")
                 email_et_user.requestFocus()
             } else {
-
-
+                progressDailog?.show()
                 adViewModel.addUser(
                     name_user.text.toString(),
                     phone_num_et.text.toString(),
-                    adViewModel.getUserType().toString(),
+                    userType,
                     email_et_user.text.toString(),
-                    "admin123"
+                    "admin123", ::Done
                 )
 
 
             }
+        }
+    }
+
+    private fun Done(s: String) {
+        if (s == "${Possibilities.SUCCESS}") {
+            progressDailog?.dismiss()
+            findNavController().navigate(R.id.action_addUser_to_adminMainScreen)
+        }else if(s=="${Possibilities.FAILED}"){
+            name_user.text.clear()
+            phone_num_et.text.clear()
+            email_et_user.text.clear()
+
+
         }
     }
 }

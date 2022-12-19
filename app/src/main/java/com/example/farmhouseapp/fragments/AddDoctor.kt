@@ -15,6 +15,7 @@ import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Animal
 import com.example.farmhouseapp.models.Doctor
+import com.example.farmhouseapp.ui.FirstScreen
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_animalin_seller.*
 import kotlinx.android.synthetic.main.fragment_add_animals.*
@@ -57,9 +58,9 @@ class AddDoctor : Fragment() {
 
 
         }
-        nameofdoctor.text = SharedPreferencesUtils.getFirstName(requireContext()).toString()
+        nameofdoctor.text = FirstScreen.userAccount.userName
         email.text = SharedPreferencesUtils.getUserEmail(requireContext()).toString()
-        SharedPreferencesUtils.getFirstName(requireContext())
+        FirstScreen.userAccount.userName
 
         saveinformation.setOnClickListener {
             if (TextUtils.isEmpty(desgination_et.getText())) {
@@ -110,7 +111,7 @@ class AddDoctor : Fragment() {
 
     private fun uploadedProfilePhoto(s: String) {
         var doctor = Doctor()
-        doctor.name =  SharedPreferencesUtils.getFirstName(requireContext()).toString()
+        doctor.name =  FirstScreen.userAccount.userName
         doctor.designation = desgination_et.text.toString()
         doctor.profilepicture = s
         doctor.email = SharedPreferencesUtils.getUserEmail(requireContext()).toString()

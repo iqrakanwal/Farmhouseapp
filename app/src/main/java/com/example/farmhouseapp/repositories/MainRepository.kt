@@ -14,6 +14,7 @@ import com.example.farmhouseapp.utils.Constants.Companion.users
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseError
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -30,7 +31,14 @@ class MainRepository(var context: Context) {
 
     var storage: FirebaseStorage? = FirebaseStorage.getInstance();
     var storageReference: StorageReference? = storage?.getReference();
-    fun addUser(name: String, num: String, role: String, email: String, password: String) {
+    fun addUser(
+        name: String,
+        num: String,
+        role: String,
+        email: String,
+        password: String,
+        callback: (String) -> Unit
+    ) {
         var user = User()
         user.name = name
         user.mobile_num = num
@@ -39,10 +47,13 @@ class MainRepository(var context: Context) {
         user.password = Constants.adminPassword
         mFirebaseDatabase?.ref?.child("${users}")?.push()?.setValue(user)?.addOnSuccessListener {
             Log.e("addUser", "add")
+            callback("${Possibilities.SUCCESS}")
+
             // startActivity(Intent(this@SignUpForm, MainScreen::class.java))
             // finish()
         }?.addOnFailureListener(object : OnFailureListener {
             override fun onFailure(p0: Exception) {
+                callback("${Possibilities.FAILED}")
                 Log.e("addUser", "add{${p0.message}}")
 
             }
@@ -183,13 +194,15 @@ class MainRepository(var context: Context) {
         mFirebaseDatabase?.child("$farms")?.get()?.addOnSuccessListener {
             for (it in it.getChildren()) {
                 val day: FarmName = it.getValue(FarmName::class.java)!!
-                array.add(day)
-            }
-            for (it in array) {
-                if ((it.farmOwner == user)) {
-                    callback(it)
+                Log.e("sdffdjdfkj", "${day.name}")
+                if (day.farmOwner == user) {
+                    array.add(day)
+                    callback(day)
                 }
+
+
             }
+
 
         }?.addOnFailureListener {
 
@@ -206,7 +219,6 @@ class MainRepository(var context: Context) {
                     animalslist.add(day)
 
                 }
-
             }
             list(animalslist)
         }
@@ -301,6 +313,90 @@ class MainRepository(var context: Context) {
             list(orders)
         }
     }
+
+    fun getOrderFromBuyer(firstName: String?, list: (ArrayList<Orders>) -> Unit) {
+        var orders: ArrayList<Orders> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.orders}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Orders = it.getValue(Orders::class.java)!!
+                if (day.buyerName == firstName) {
+                    orders.add(day)
+                }
+            }
+            list(orders)
+        }
+
+
+    }
+
+/*
+    fun getAllUsers(list: (ArrayList<User>) -> Unit) {
+        var users: ArrayList<User> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.users}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: User = it.getValue(User::class.java)!!
+                users.add(day)
+            }
+            list(users)
+        }
+    }
+*/
+
+    fun getAllUser(userName: String, list: (ArrayList<User>) -> Unit) {
+        var users: ArrayList<User> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.users}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: User = it.getValue(User::class.java)!!
+                if (day.role == userName) {
+                    users.add(day)
+                }
+            }
+            list(users)
+        }
+    }
+
+    fun getOrderfromSeller(firstName: String?, list: (ArrayList<Orders>) -> Unit) {
+        var orders: ArrayList<Orders> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${Constants.orders}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Orders = it.getValue(Orders::class.java)!!
+                if (day.ownerName == firstName) {
+                    orders.add(day)
+                }
+            }
+            list(orders)
+        }
+    }
+
+    fun updateOrder(order: String?, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${orders}")
+            ?.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+
+                    if (dataSnapshot.exists()) {
+                        for (datas in dataSnapshot.children) {
+                            if (datas.hasChild("orderstatus")) {
+                                mFirebaseDatabase?.ref?.child("${orders}")?.child(datas.getKey()!!)
+                                    ?.child("orderstatus")
+                                    ?.setValue(order);
+                            }
+
+
+
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+                fun onCancelled(firebaseError: FirebaseError?) {}
+            })
+
+    }
+
 }
 
 

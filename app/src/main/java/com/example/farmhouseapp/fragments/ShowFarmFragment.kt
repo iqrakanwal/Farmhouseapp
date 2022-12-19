@@ -1,6 +1,7 @@
 package com.example.farmhouseapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Animal
 import com.example.farmhouseapp.models.FarmName
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_show_farm.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -40,20 +42,28 @@ class ShowFarmFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(
-            requireContext(), "${SharedPreferencesUtils.getFarmName(requireContext())}",
-            Toast.LENGTH_SHORT
-        ).show()
-       //SharedPreferencesUtils.setFarmName(requireContext(), "")
-        if (SharedPreferencesUtils.getFarmName(requireContext()).toString() == "") {
-            coverphoto.visibility = View.GONE
-            profilepicture.visibility = View.GONE
-            farmname.visibility = View.GONE
-            numoffarms.visibility = View.GONE
-            animals.visibility = View.GONE
-            animalsoffarms.visibility = View.GONE
-            locationoffarm.visibility = View.GONE
-        } else {
+
+
+        Log.e("dfhkdjfh", "${userAccount.userName}")
+        Log.e("dfhkdjfh", "${userAccount.email}")
+        Log.e("dfhkdjfh", "${userAccount.role}")
+        Log.e("dfhkdjfh", "${userAccount.password}")
+        Log.e("dfhkdjfh", "${userAccount.userName}")
+        farmname.text = SharedPreferencesUtils.getFarmName(requireContext()).toString()
+        adViewModel.getSellerFarm(
+            userAccount.userName,
+            ::getFarm
+        )
+
+        addFarmicon.setOnClickListener {
+            findNavController().navigate(R.id.action_showFarmFragment_to_addFarmInSeller)
+        }
+
+    }
+
+    fun getFarm(farm: FarmName) {
+        Log.e("hjhj", "${farm.name}")
+        if (farm != null) {
             coverphoto.visibility = View.VISIBLE
             profilepicture.visibility = View.VISIBLE
             farmname.visibility = View.VISIBLE
@@ -61,30 +71,31 @@ class ShowFarmFragment : Fragment() {
             animals.visibility = View.VISIBLE
             addFarmicon.visibility = View.GONE
             animalsoffarms.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), "${farm.name}fxgfdgffd", Toast.LENGTH_SHORT).show()
+            farmname.text = farm.name
+            locationoffarm.text = farm.location
+            numoffarms.text = farm.phoneNo
+            Glide.with(requireContext()).load(farm.coverProfile).into(coverphoto)
+            Glide.with(requireContext()).load(farm.coverProfile).into(profilepicture)
+            Yourorder.setOnClickListener {
+
+
+                findNavController().navigate(R.id.action_showFarmFragment_to_yourOrders)
+            }
+            getAnimalofFarm()
+        } else {
+            coverphoto.visibility = View.GONE
+            profilepicture.visibility = View.GONE
+            farmname.visibility = View.GONE
+            numoffarms.visibility = View.GONE
+            animals.visibility = View.GONE
+            animalsoffarms.visibility = View.GONE
+            locationoffarm.visibility = View.GONE
             locationoffarm.visibility = View.VISIBLE
 
+
         }
-        addFarmicon.setOnClickListener {
 
-            findNavController().navigate(R.id.action_showFarmFragment_to_addFarmInSeller)
-        }
-        farmname.text = SharedPreferencesUtils.getFarmName(requireContext()).toString()
-        adViewModel.getSellerFarm(
-            SharedPreferencesUtils.getFirstName(requireContext()).toString(),
-            ::getFarm
-        )
-
-
-    }
-
-    fun getFarm(farm: FarmName) {
-        Toast.makeText(requireContext(), "${farm}fxgfdgffd", Toast.LENGTH_SHORT).show()
-        farmname.text = farm.name
-        locationoffarm.text = farm.location
-        numoffarms.text = farm.phoneNo
-        Glide.with(requireContext()).load(farm.coverProfile).into(coverphoto)
-        Glide.with(requireContext()).load(farm.coverProfile).into(profilepicture)
-        getAnimalofFarm()
     }
 
 
@@ -118,6 +129,17 @@ class ShowFarmFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+
+        farmname.text = SharedPreferencesUtils.getFarmName(requireContext()).toString()
+        adViewModel.getSellerFarm(
+            userAccount.userName,
+            ::getFarm
+        )
+
+    }
 
 }
 

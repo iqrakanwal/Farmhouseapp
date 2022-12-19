@@ -17,20 +17,20 @@ class FirstScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
         admin.setOnClickListener {
-            startActivity(Intent(this@FirstScreen, AdminScreen::class.java))
-            finish()
+            startActivity(Intent(this@FirstScreen, LoginAdmnActivity::class.java))
+           // finish()
         }
         buyer.setOnClickListener {
             startActivity(Intent(this@FirstScreen, LoginActivity::class.java))
-            finish()
+           // finish()
         }
         seller.setOnClickListener {
             startActivity(Intent(this@FirstScreen, LoginActivity::class.java))
-            finish()
+           // finish()
         }
         doctor.setOnClickListener {
             startActivity(Intent(this@FirstScreen, LoginActivity::class.java))
-            finish()
+          //  finish()
         }
 
 

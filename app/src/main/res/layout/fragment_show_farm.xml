@@ -30,6 +30,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coverphoto" />
 
+
+    <Button
+        android:id="@+id/Yourorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="orders"
+        app:layout_constraintStart_toEndOf="@+id/profilepicture"
+        app:layout_constraintTop_toBottomOf="@+id/coverphoto" />
     <TextView
         android:id="@+id/farmname"
         android:layout_width="wrap_content"

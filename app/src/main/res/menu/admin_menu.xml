@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/addfarm"
-        android:icon="@drawable/ic_add"
-        android:title="Add Farm" />
 
-    <item
-        android:id="@+id/showfarms"
-        android:icon="@drawable/ic_add"
-        android:title="Farms" />
 
-    <item
-        android:id="@+id/addAnimals"
-        android:icon="@drawable/ic_add"
-        android:title="Add Animals" />
 
-    <item
-        android:id="@+id/showanimals"
-        android:icon="@drawable/ic_add"
-        android:title="Animals" />
-    <item
-        android:id="@+id/addUsers"
-        android:icon="@drawable/ic_add"
-        android:title="Add Users" />
+
 
 
     <item
-        android:id="@+id/orders"
+        android:id="@+id/adddoctor"
         android:icon="@drawable/ic_add"
-        android:title="orders" />
+        android:title="Add Doctor" />
+    <item
+        android:id="@+id/addfarmer"
+        android:icon="@drawable/ic_add"
+        android:title="Add Farmer" />
+
+
+    <item
+        android:id="@+id/addbuyer"
+        android:icon="@drawable/ic_add"
+        android:title="Add Buyer" />
+
+
+    <item android:id="@+id/managerating"
+        android:icon="@drawable/ic_add"
+        android:title="Manage Rating"/>
 </menu>

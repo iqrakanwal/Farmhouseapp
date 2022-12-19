@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Doctor
+import com.example.farmhouseapp.ui.FirstScreen
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_doctor_main_page.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -34,7 +35,7 @@ class DoctorMainPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adViewModel.getDoctor(
             SharedPreferencesUtils.getUserEmail(requireContext()),
-            SharedPreferencesUtils.getFirstName(requireContext()), ::Done
+            FirstScreen.userAccount.userName, ::Done
         )
 
     }

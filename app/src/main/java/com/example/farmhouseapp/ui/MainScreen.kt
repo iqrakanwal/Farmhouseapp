@@ -1,6 +1,8 @@
 package com.example.farmhouseapp.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +19,7 @@ import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.Users
 import com.example.farmhouseapp.models.Animal
+import com.example.farmhouseapp.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main_screen.*
 import kotlinx.android.synthetic.main.drawerlayout.*
@@ -62,6 +65,13 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
             myNavHostFragment.navController.graph = graph
             nav_view_drawer.getMenu().clear();
             nav_view_drawer.inflateMenu(R.menu.doctors_menu);
+
+        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+            val inflater = myNavHostFragment.navController.navInflater
+            val graph = inflater.inflate(R.navigation.nav_graph)
+            myNavHostFragment.navController.graph = graph
+            nav_view_drawer.getMenu().clear();
+            nav_view_drawer.inflateMenu(R.menu.admin_menu);
 
         }
 
@@ -137,6 +147,22 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
             }
 
+        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+            navController.addOnDestinationChangedListener { controller, destination, arguments ->
+                when (destination.id) {
+                    R.id.addUser -> {
+
+                    }
+                    R.id.addUser -> {
+
+                    }
+
+
+                }
+
+
+            }
+
         }
 
 
@@ -185,22 +211,47 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 //                    }
                     true
                 }
-                R.id.showfarms -> {
-                    // startActivity(Intent(this@MainActivity, SettingConActivity::class.java))
-                    true
-                }
+
                 else -> super.onOptionsItemSelected(item)
             }
         } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
             return when (item.itemId) {
-                R.id.addFarm -> {
+                R.id.apointments -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
                     true
                 }
-                R.id.showfarms -> {
-                    // startActivity(Intent(this@MainActivity, SettingConActivity::class.java))
+
+                else -> super.onOptionsItemSelected(item)
+            }
+        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+            return when (item.itemId) {
+                R.id.addbuyer -> {
+                    Constants.userType= "${Users.BUYER}"
+                    tvToolbarTitle.text = "Add Buyer"
+                    navController.navigate(R.id.action_adminMainScreen_to_addUser)
+                    drawer_layout.closeDrawer(GravityCompat.START)
                     true
                 }
+                R.id.adddoctor -> {
+                    Constants.userType= "${Users.DOCTOR}"
+                    tvToolbarTitle.text = "Add Doctor"
+                    navController.navigate(R.id.action_adminMainScreen_to_addUser)
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                    true
+                } R.id.addfarmer -> {
+                    Constants.userType= "${Users.SELLER}"
+                    tvToolbarTitle.text = "Add Farmer"
+                    navController.navigate(R.id.action_adminMainScreen_to_addUser)
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                R.id.managerating -> {
+                    tvToolbarTitle.text = "Rating"
+
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                    true
+                }
+
                 else -> super.onOptionsItemSelected(item)
             }
         }
@@ -259,6 +310,74 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         return false
+    }
+
+
+    override fun onBackPressed() {
+        if (SharedPreferencesUtils.getUserRole(this) == "${Users.SELLER}") {
+
+
+            when (navController.currentDestination?.id) {
+                R.id.addanimal -> {
+
+                }
+
+                R.id.farmrating -> {
+
+                }
+                R.id.showFarmFragment -> {
+                    backPressed()
+                }
+
+                else -> {
+                    backPressed()
+                }
+            }
+
+
+        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.BUYER}") {
+            when (navController.currentDestination?.id) {
+                R.id.orderHistory -> {
+
+                }
+
+                R.id.showAnimalFragment -> {
+
+                }
+
+                else -> {
+                    backPressed()
+                }
+            }
+
+        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
+
+            when (navController.currentDestination?.id) {
+                R.id.orderHistory -> {
+
+
+                }
+
+                R.id.showAnimalFragment -> {
+
+                }
+
+                else -> {
+                    backPressed()
+                }
+            }
+        }
+
+    }
+
+    private fun backPressed() {
+        SharedPreferencesUtils?.setUserEmail(this,"")
+        SharedPreferencesUtils?.setOwner(this,"")
+        SharedPreferencesUtils?.setUserRole(this,"")
+        SharedPreferencesUtils?.setFirstName(this,"")
+        SharedPreferencesUtils?.setFarmName(this,"")
+        SharedPreferencesUtils?.setUserPhone(this,"")
+        System.exit(0)
     }
 
 
