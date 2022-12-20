@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.farmhouseapp.ApointmentStatus
 import com.example.farmhouseapp.OrderStatus
 import com.example.farmhouseapp.R
@@ -15,6 +16,7 @@ import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_doctor_details.*
 import kotlinx.android.synthetic.main.fragment_orderdetail.*
+import kotlinx.android.synthetic.main.fragment_show_farm.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DoctorDetails : Fragment() {
@@ -36,6 +38,11 @@ class DoctorDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         doctname.text = adViewModel.getDoctor()?.name
+        doctdesignation.text = adViewModel.getDoctor()?.designation
+        docthospitals.text = adViewModel.getDoctor()?.hospital
+        slot.text = adViewModel.getDoctor()?.slot
+        contactno.text = adViewModel.getDoctor()?.contactnum
+        Glide.with(requireContext()).load(adViewModel.getDoctor()?.profilepicture).into(imageViewdoc)
         var appointments= Appointments()
         appointments.doctorname= adViewModel.getDoctor()!!
         appointments.sellername= userAccount.userName

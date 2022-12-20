@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.farmhouseapp.OrderStatus
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.fragment_doctor_details.*
 import kotlinx.android.synthetic.main.fragment_orderdetail.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -34,6 +36,10 @@ class Orderdetail : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         productname.text = adViewModel.getOrder()?.animalid?.name
+        productprice.text = adViewModel.getOrder()?.animalid?.price
+        orderstatus.text = adViewModel.getOrder()?.orderstatus
+        Glide.with(requireContext()).load(adViewModel.getOrder()?.animalid?.images).into(imageView)
+
         delieverorder.setOnClickListener {
             adViewModel.updateOrder("${OrderStatus.DELIVERED}", ::orderDelivered)
         }
