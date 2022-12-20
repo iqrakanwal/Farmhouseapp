@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Animal
+import com.example.farmhouseapp.utils.Constants.Companion.farmid
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_animalin_seller.*
 import kotlinx.android.synthetic.main.fragment_add_animals.*
@@ -137,7 +138,7 @@ class AddAnimalinSeller : Fragment() {
         var animals = Animal()
         animals.name = nameofanimal_et_seller.text.toString()
         animals.catagory = nameofbreed_et_seller.text.toString()
-        animals.farmName = SharedPreferencesUtils.getFarmName(requireContext()).toString()
+        animals.farmName = farmid.name
         animals.price = price_et_seller.text.toString()
         animals.images =  s
         animals.quantity = qunatityofanimal_et_seller.text.toString()

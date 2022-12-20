@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.farmhouseapp.AnimalAdaptor
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.models.Animal
+import com.example.farmhouseapp.utils.Constants.Companion.animalid
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_show_animal.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -84,7 +85,7 @@ class ShowAnimalFragment : Fragment() {
     }
 
     private fun itemCliked(animal: Animal) {
-        adViewModel.setAnimal(animal)
+        animalid= animal
         findNavController().navigate(R.id.action_showAnimalFragment_to_orderAnimalFragment)
     }
 

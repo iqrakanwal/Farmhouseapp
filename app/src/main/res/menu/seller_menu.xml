@@ -11,9 +11,9 @@
         android:title="Farms rating" />
 
     <item
-        android:id="@+id/edtifarm"
+        android:id="@+id/doctor"
         android:icon="@drawable/ic_add"
-        android:title="Edti Farms" />
+        android:title="Doctors" />
 
 
 </menu>

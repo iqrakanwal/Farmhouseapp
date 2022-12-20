@@ -12,9 +12,11 @@ class MainViewModel(var repository: MainRepository) : ViewModel() {
     var userTile: MutableLiveData<String>? = MutableLiveData()
     var userType: MutableLiveData<String>? = MutableLiveData()
 
-    lateinit var animalObject: Animal
-    lateinit var orderforDetail: Orders
-    lateinit var farmObject: FarmName
+
+    var orderforDetail: Orders = Orders()
+    var doctorsdeatail: Doctor = Doctor()
+    var appointmentsdeatail: Appointments = Appointments()
+
     fun addUser(
         name: String,
         num: String,
@@ -24,22 +26,6 @@ class MainViewModel(var repository: MainRepository) : ViewModel() {
         callback: (String) -> Unit
     ) {
         repository.addUser(name, num, role, email, password, callback)
-    }
-
-    fun setAnimal(animal1: Animal) {
-        animalObject = animal1
-    }
-
-    fun setFarm(farmname1: FarmName) {
-        farmObject = farmname1
-    }
-
-    fun getAnimal(): Animal {
-        return animalObject
-    }
-
-    fun getFarm(): FarmName {
-        return farmObject
     }
 
 
@@ -141,13 +127,47 @@ class MainViewModel(var repository: MainRepository) : ViewModel() {
         orderforDetail = orders
     }
 
+    fun setDoctors(orders: Doctor) {
+        doctorsdeatail = orders
+    }
+
 
     fun getOrder(): Orders? {
         return orderforDetail;
     }
 
+    fun getDoctor(): Doctor? {
+        return doctorsdeatail;
+    }
+
     fun updateOrder(order: String?, callback: (String) -> Unit) {
-repository?.updateOrder(order, callback)
+        repository?.updateOrder(order, callback)
+    }
+
+    fun getAllDoctors(userName: String?, callback: (java.util.ArrayList<Doctor?>) -> Unit) {
+        repository.getAllDoctors(userName, callback)
+
+    }
+
+    fun takeApointment(s: Appointments, callback: (String) -> Unit) {
+        repository.insertAppoint(s, callback)
+    }
+
+    fun getAppointment(s: String, list: (ArrayList<Appointments>) -> Unit) {
+repository.getAppoimentForDoctor(s, list)
+    }
+
+    fun serAppointment(orders: Appointments) {
+        appointmentsdeatail= orders
+    }
+
+    fun getAppointment():Appointments{
+        return appointmentsdeatail
+
+    }
+
+    fun updateAppointment(s: String,  callback: (String) -> Unit) {
+        repository?.updateAppointment(s, callback)
     }
 
 }

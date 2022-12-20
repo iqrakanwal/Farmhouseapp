@@ -11,6 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.FarmName
+import com.example.farmhouseapp.utils.Constants
+import com.example.farmhouseapp.utils.Constants.Companion.animalid
+import com.example.farmhouseapp.utils.Constants.Companion.farmid
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_order_animal.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -35,21 +38,20 @@ class OrderAnimalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adViewModel.getAnimal()
-        adViewModel.getFarmFromAnimal(adViewModel.getAnimal().farmName.toString(), ::farmName)
-        animalName.text = adViewModel.getAnimal().name
-        farmname.text = adViewModel.getAnimal().farmName
-        breedname.text = adViewModel.getAnimal().catagory
-        price.text = adViewModel.getAnimal().price
-        quantityavailable.text = adViewModel.getAnimal().quantity
-        Glide.with(requireContext()).load(adViewModel.getAnimal().images).into(coverPhoto)
+        adViewModel.getFarmFromAnimal(animalid.farmName, ::farmName)
+        animalName.text = Constants.animalid.name
+        farmname.text = Constants.animalid.farmName
+        breedname.text = Constants.animalid.catagory
+        price.text = Constants.animalid.price
+        quantityavailable.text = Constants.animalid.quantity
+        Glide.with(requireContext()).load(Constants.animalid.images).into(coverPhoto)
         // Toast.makeText(requireContext(), "${adViewModel.getAnimal().name}" ,Toast.LENGTH_SHORT).show()
         ordernow.setOnClickListener {
             findNavController().navigate(R.id.action_orderAnimalFragment_to_addBillingInformation)
         }
         chatwithseller.setOnClickListener {
-            SharedPreferencesUtils.setOwner(requireContext(), adViewModel.getFarm().farmOwner)
-
+            SharedPreferencesUtils.setOwner(requireContext(), farmid.farmOwner)
+            SharedPreferencesUtils.getFarmName(requireContext()).toString()
             findNavController().navigate(R.id.action_orderAnimalFragment_to_chattingwithFargment)
         }
 
@@ -59,7 +61,8 @@ class OrderAnimalFragment : Fragment() {
         farmlocation.text = farmName.location
         farmPhonenum.text = farmName.phoneNo
         onwername.text = farmName.farmOwner
-        adViewModel.setFarm(farmName)
+        farmid= farmName
+        SharedPreferencesUtils.setFarmName(requireContext(), farmName.name)
     }
 
 }

@@ -1,12 +1,9 @@
 package com.example.farmhouseapp.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -16,9 +13,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.farmhouseapp.AnimalAdaptor
 import com.example.farmhouseapp.R
-import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.Users
 import com.example.farmhouseapp.models.Animal
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main_screen.*
@@ -34,17 +31,17 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
     lateinit var myNavHostFragment: NavHostFragment
     lateinit var navController: NavController
 
-    //var name = "${SharedPreferencesUtils.getUserRole(this)}"
+    //var name = "${userAccount.role}"
     //  var name :String?=null
     lateinit var drawer_layout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawerlayout)
+        setSupportActionBar(toolbar);
         drawer_layout = findViewById(R.id.drawer_layout)
-        myNavHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        myNavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = myNavHostFragment.navController
-        if (SharedPreferencesUtils.getUserRole(this) == "${Users.SELLER}") {
+        if (userAccount.role == "${Users.SELLER}") {
             val inflater = myNavHostFragment.navController.navInflater
             val graph = inflater.inflate(R.navigation.seller_navigations)
             myNavHostFragment.navController.graph = graph
@@ -53,20 +50,20 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
             /* btn_start.setOnClickListener {
                  startActivity(Intent(this, AddAnimalActivty::class.java))
              }*/
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.BUYER}") {
+        } else if (userAccount.role == "${Users.BUYER}") {
             val inflater = myNavHostFragment.navController.navInflater
             val graph = inflater.inflate(R.navigation.buyyer_navigation)
             myNavHostFragment.navController.graph = graph
             nav_view_drawer.getMenu().clear();
             nav_view_drawer.inflateMenu(R.menu.buyer_menu);
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
+        } else if (userAccount.role == "${Users.DOCTOR}") {
             val inflater = myNavHostFragment.navController.navInflater
             val graph = inflater.inflate(R.navigation.doctor_navigation)
             myNavHostFragment.navController.graph = graph
             nav_view_drawer.getMenu().clear();
             nav_view_drawer.inflateMenu(R.menu.doctors_menu);
 
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+        } else if (userAccount.role == "${Users.ADMIN}") {
             val inflater = myNavHostFragment.navController.navInflater
             val graph = inflater.inflate(R.navigation.nav_graph)
             myNavHostFragment.navController.graph = graph
@@ -81,7 +78,7 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     private fun listenerFunction() {
-        if (SharedPreferencesUtils.getUserRole(this) == "${Users.SELLER}") {
+        if (userAccount.role == "${Users.SELLER}") {
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
                 when (destination.id) {
                     R.id.addAnimalinSeller -> {
@@ -106,7 +103,7 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
 
             }
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.BUYER}") {
+        } else if (userAccount.role == "${Users.BUYER}") {
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
                 when (destination.id) {
                     R.id.showAnimalFragment -> {
@@ -131,7 +128,7 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
 
             }
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
+        } else if (userAccount.role == "${Users.DOCTOR}") {
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
                 when (destination.id) {
                     R.id.doctorMainPage -> {
@@ -147,7 +144,7 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
             }
 
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+        } else if (userAccount.role == "${Users.ADMIN}") {
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
                 when (destination.id) {
                     R.id.addUser -> {
@@ -170,7 +167,7 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if (SharedPreferencesUtils.getUserRole(this) == "${Users.SELLER}") {
+        if (userAccount.role == "${Users.SELLER}") {
             return when (item.itemId) {
                 R.id.addanimal -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
@@ -182,13 +179,15 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
                     // startActivity(Intent(this@MainActivity, SettingConActivity::class.java))
                     true
                 }
-                R.id.edtifarm -> {
+                R.id.doctor -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
+                    navController.navigate(R.id.action_showFarmFragment_to_doctorsLsit)
+
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
             }
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.BUYER}") {
+        } else if (userAccount.role == "${Users.BUYER}") {
             return when (item.itemId) {
                 R.id.myordershistry -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
@@ -214,32 +213,33 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
                 else -> super.onOptionsItemSelected(item)
             }
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
+        } else if (userAccount.role == "${Users.DOCTOR}") {
             return when (item.itemId) {
                 R.id.apointments -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
+                    navController.navigate(R.id.action_doctorMainPage_to_appointmentLsit)
                     true
                 }
-
                 else -> super.onOptionsItemSelected(item)
             }
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.ADMIN}") {
+        } else if (userAccount.role == "${Users.ADMIN}") {
             return when (item.itemId) {
                 R.id.addbuyer -> {
-                    Constants.userType= "${Users.BUYER}"
+                    Constants.userType = "${Users.BUYER}"
                     tvToolbarTitle.text = "Add Buyer"
                     navController.navigate(R.id.action_adminMainScreen_to_addUser)
                     drawer_layout.closeDrawer(GravityCompat.START)
                     true
                 }
                 R.id.adddoctor -> {
-                    Constants.userType= "${Users.DOCTOR}"
+                    Constants.userType = "${Users.DOCTOR}"
                     tvToolbarTitle.text = "Add Doctor"
                     navController.navigate(R.id.action_adminMainScreen_to_addUser)
                     drawer_layout.closeDrawer(GravityCompat.START)
                     true
-                } R.id.addfarmer -> {
-                    Constants.userType= "${Users.SELLER}"
+                }
+                R.id.addfarmer -> {
+                    Constants.userType = "${Users.SELLER}"
                     tvToolbarTitle.text = "Add Farmer"
                     navController.navigate(R.id.action_adminMainScreen_to_addUser)
                     drawer_layout.closeDrawer(GravityCompat.START)
@@ -314,71 +314,92 @@ class MainScreen : AppCompatActivity(), NavigationView.OnNavigationItemSelectedL
 
 
     override fun onBackPressed() {
-        if (SharedPreferencesUtils.getUserRole(this) == "${Users.SELLER}") {
 
 
-            when (navController.currentDestination?.id) {
-                R.id.addanimal -> {
+        if (userAccount.role == "${Users.SELLER}") {
 
-                }
+            navController?.popBackStack()
+            /*   when (navController.currentDestination?.id) {
+                   R.id.addanimal -> {
 
-                R.id.farmrating -> {
+                   }
 
-                }
-                R.id.showFarmFragment -> {
-                    backPressed()
-                }
+                   R.id.farmrating -> {
 
-                else -> {
-                    backPressed()
-                }
-            }
+                   }
+                   R.id.showFarmFragment -> {
+                       backPressed()
+                   }
 
-
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.BUYER}") {
-            when (navController.currentDestination?.id) {
-                R.id.orderHistory -> {
-
-                }
-
-                R.id.showAnimalFragment -> {
-
-                }
-
-                else -> {
-                    backPressed()
-                }
-            }
-
-        } else if (SharedPreferencesUtils.getUserRole(this) == "${Users.DOCTOR}") {
-
-            when (navController.currentDestination?.id) {
-                R.id.orderHistory -> {
+                   else -> {
+                       backPressed()
+                   }
+               }*/
 
 
-                }
+        } else if (userAccount.role == "${Users.BUYER}") {
+            navController?.popBackStack()
 
-                R.id.showAnimalFragment -> {
+            /*   when (navController.currentDestination?.id) {
+                   R.id.orderHistory -> {
 
-                }
+                   }
 
-                else -> {
-                    backPressed()
-                }
-            }
+                   R.id.showAnimalFragment -> {
+
+                   }
+
+                   else -> {
+                       backPressed()
+                   }
+               }*/
+
+        } else if (userAccount.role == "${Users.DOCTOR}") {
+            navController?.popBackStack()
+
+            /* when (navController.currentDestination?.id) {
+                 R.id.appointments -> {
+
+
+                 }
+
+                 R.id.showAnimalFragment -> {
+
+                 }
+
+                 else -> {
+                     backPressed()
+                 }
+             }*/
         }
 
     }
 
     private fun backPressed() {
-        SharedPreferencesUtils?.setUserEmail(this,"")
+/*        SharedPreferencesUtils?.setUserEmail(this,"")
         SharedPreferencesUtils?.setOwner(this,"")
         SharedPreferencesUtils?.setUserRole(this,"")
         SharedPreferencesUtils?.setFirstName(this,"")
         SharedPreferencesUtils?.setFarmName(this,"")
-        SharedPreferencesUtils?.setUserPhone(this,"")
+        SharedPreferencesUtils?.setUserPhone(this,"")*/
         System.exit(0)
     }
 
-
+    /*
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            menuInflater.inflate(R.menu.main_menu, menu)
+            return true
+        }
+    */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.signout -> {
+                System.exit(0)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

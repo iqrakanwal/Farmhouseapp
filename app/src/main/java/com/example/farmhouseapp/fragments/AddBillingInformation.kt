@@ -15,6 +15,8 @@ import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Orders
 import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
+import com.example.farmhouseapp.utils.Constants.Companion.animalid
+import com.example.farmhouseapp.utils.Constants.Companion.farmid
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_animals.*
 import kotlinx.android.synthetic.main.fragment_add_billing_information.*
@@ -41,14 +43,13 @@ class AddBillingInformation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adViewModel.getAnimal()
-        adViewModel.getFarm()
-        Glide.with(requireContext()).load(adViewModel.getAnimal().images).into(image)
-        productname.text = adViewModel.getAnimal().name
-        productprice.text = adViewModel.getAnimal().price
-        productbreed.text = adViewModel.getAnimal().catagory
+
+        Glide.with(requireContext()).load(animalid.images).into(image)
+        productname.text = animalid.name
+        productprice.text = animalid.price
+        productbreed.text = animalid.catagory
         username.text = userAccount.userName
-        email.text = SharedPreferencesUtils.getUserEmail(requireContext())
+        email.text = userAccount.email
         phone_num.text = ""
         user_address_et.text
         continuetopayment.setOnClickListener {
@@ -57,10 +58,10 @@ class AddBillingInformation : Fragment() {
                 user_address_et.requestFocus()
             } else {
                 var order = Orders()
-                order.animalid = adViewModel.getAnimal()
-                order.farmName = adViewModel.getFarm().name
-                order.ownerName = adViewModel.getFarm().farmOwner
-                order.totalAmount = adViewModel.getAnimal().price
+                order.animalid = animalid
+                order.farmName = animalid.name
+                order.ownerName = farmid.farmOwner
+                order.totalAmount = animalid.price
                 order.orderstatus = "${OrderStatus.PENDING}"
                 order.buyerName = userAccount.userName
                 adViewModel.placeOrder(order, ::Done)

@@ -21,9 +21,9 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.farmhouseapp.R
-import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.FarmName
 import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
+import com.example.farmhouseapp.utils.Constants.Companion.farmid
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_tactivity.*
 import kotlinx.android.synthetic.main.fragment_add_farm_in_seller.*
@@ -175,6 +175,7 @@ class AddFarmInSeller : Fragment() {
         farmName.coverProfile = coverpath.toString()
         farmName.profileImages = profileId.toString()
         farmName.farmOwner = userAccount.userName
+        farmid=farmName
         adViewModel.addFarm(farmName, ::Done)
     }
 

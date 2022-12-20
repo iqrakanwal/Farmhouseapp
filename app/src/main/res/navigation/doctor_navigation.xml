@@ -22,5 +22,24 @@
         <action
             android:id="@+id/action_doctorMainPage_to_addDoctor2"
             app:destination="@id/addDoctor2" />
+        <action
+            android:id="@+id/action_doctorMainPage_to_appointmentLsit"
+            app:destination="@id/appointmentLsit" />
+    </fragment>
+    <fragment
+        android:id="@+id/appointmentLsit"
+        android:name="com.example.farmhouseapp.fragments.AppointmentLsit"
+        android:label="AppointmentLsit" >
+        <action
+            android:id="@+id/action_appointmentLsit_to_appointmentDetails"
+            app:destination="@id/appointmentDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/appointmentDetails"
+        android:name="com.example.farmhouseapp.fragments.AppointmentDetails"
+        android:label="AppointmentDetails" >
+        <action
+            android:id="@+id/action_appointmentDetails_to_appointmentLsit"
+            app:destination="@id/appointmentLsit" />
     </fragment>
 </navigation>

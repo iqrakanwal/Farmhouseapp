@@ -16,6 +16,7 @@ import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.models.Animal
 import com.example.farmhouseapp.models.Doctor
 import com.example.farmhouseapp.ui.FirstScreen
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.fragment_add_animalin_seller.*
 import kotlinx.android.synthetic.main.fragment_add_animals.*
@@ -25,8 +26,6 @@ import java.io.IOException
 
 
 class AddDoctor : Fragment() {
-
-
     private val adViewModel: MainViewModel by sharedViewModel()
     val PICK_IMAGE = 1
     var doctorpath: String? = ""
@@ -55,12 +54,10 @@ class AddDoctor : Fragment() {
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
-
-
         }
-        nameofdoctor.text = FirstScreen.userAccount.userName
-        email.text = SharedPreferencesUtils.getUserEmail(requireContext()).toString()
-        FirstScreen.userAccount.userName
+        nameofdoctor.text = userAccount.userName
+        email.text = userAccount.email
+        userAccount.userName
 
         saveinformation.setOnClickListener {
             if (TextUtils.isEmpty(desgination_et.getText())) {
@@ -111,12 +108,13 @@ class AddDoctor : Fragment() {
 
     private fun uploadedProfilePhoto(s: String) {
         var doctor = Doctor()
-        doctor.name =  FirstScreen.userAccount.userName
+        doctor.name =  userAccount.userName
         doctor.designation = desgination_et.text.toString()
         doctor.profilepicture = s
-        doctor.email = SharedPreferencesUtils.getUserEmail(requireContext()).toString()
+        doctor.email = userAccount.email
         doctor.hospital = hopital_et.text.toString()
         doctor.contactnum = contactnum_et.text.toString()
+        doctor.slot = "9AM to 1PM"
         adViewModel.adDoctor(doctor, ::Done)
     }
 

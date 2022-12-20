@@ -100,12 +100,8 @@ public class ChatWithSellerForSeller extends Fragment {
         getMessageRecievername="fdgdf";
 
         chattoolbar = view.findViewById(R.id.chat_toolbar);
-
-
         LayoutInflater layoutInflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionbarview = layoutInflater.inflate(R.layout.custom_chat_bar, null);
-
-
         sendMessageButton = view.findViewById(R.id.send_message_btn);
         sendFileButton = view.findViewById(R.id.send_files_btn);
         messagesentinput = view.findViewById(R.id.input_messages);

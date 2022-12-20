@@ -1,6 +1,7 @@
 package com.example.farmhouseapp.fragments;
 
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -105,10 +106,8 @@ public class ChattingwithFargment extends Fragment {
         //mauth=FirebaseAuth.getInstance();
         messageSenderId = SharedPreferencesUtils.INSTANCE.getUserUid(requireContext());
         RootRef = FirebaseDatabase.getInstance().getReference();
-
         messageRecieverId = SharedPreferencesUtils.INSTANCE.getOwner(requireContext());
         getMessageRecievername="fdgdf";
-
         chattoolbar = view.findViewById(R.id.chat_toolbar);
 
 

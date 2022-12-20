@@ -12,10 +12,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.farmhouseapp.R
 import com.example.farmhouseapp.SharedPreferencesUtils
+import com.example.farmhouseapp.UserAccount
 import com.example.farmhouseapp.Users
 import com.example.farmhouseapp.models.User
+import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
 import com.example.farmhouseapp.utils.Constants
-import com.example.farmhouseapp.utils.Constants.Companion.senderid
 import com.example.farmhouseapp.utils.Constants.Companion.users
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -117,20 +118,11 @@ class SignUpForm : AppCompatActivity() {
                             FirebaseDatabase.getInstance().reference.child("${users}").push()
                                 .setValue(user)
                                 .addOnSuccessListener {
-                                    SharedPreferencesUtils.setFirstName(
-                                        this,
-                                        name_et.getText().toString()
-                                    )
-                                    SharedPreferencesUtils.setUserRole(
-                                        this,
-                                        userSelected)
-                                    SharedPreferencesUtils.setUserEmail(
-                                        this,
-                                        email_et.getText().toString()
-                                    )
-
-                                    SharedPreferencesUtils.setUserPhone(this,
-                                        phone_num_et.getText().toString())
+                                    userAccount= UserAccount()
+                                    userAccount.userName= name_et.getText().toString()
+                                    userAccount.role= userSelected
+                                    userAccount.email= email_et.getText().toString()
+                                    userAccount.phone=  phone_num_et.getText().toString()
                                     Toast.makeText(
                                         applicationContext,
                                         "Signup Sucessfully",

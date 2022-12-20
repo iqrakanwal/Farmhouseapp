@@ -36,6 +36,12 @@
         <action
             android:id="@+id/action_showFarmFragment_to_yourOrders"
             app:destination="@id/yourOrders" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_chatList"
+            app:destination="@id/chatList" />
+        <action
+            android:id="@+id/action_showFarmFragment_to_doctorsLsit"
+            app:destination="@id/doctorsLsit" />
 
     </fragment>
     <fragment
@@ -78,5 +84,32 @@
         <action
             android:id="@+id/action_orderdetail_to_showFarmFragment"
             app:destination="@id/showFarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatList"
+        android:name="com.example.farmhouseapp.fragments.ChatList"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list" >
+        <action
+            android:id="@+id/action_chatList_to_chatWithSellerForSeller"
+            app:destination="@id/chatWithSellerForSeller" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorsLsit"
+        android:name="com.example.farmhouseapp.fragments.DoctorsLsit"
+        android:label="fragment_doctors_lsit"
+        tools:layout="@layout/fragment_doctors_lsit" >
+        <action
+            android:id="@+id/action_doctorsLsit_to_doctorDetails"
+            app:destination="@id/doctorDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorDetails"
+        android:name="com.example.farmhouseapp.fragments.DoctorDetails"
+        android:label="fragment_doctor_details"
+        tools:layout="@layout/fragment_doctor_details" >
+        <action
+            android:id="@+id/action_doctorDetails_to_doctorsLsit"
+            app:destination="@id/doctorsLsit" />
     </fragment>
 </navigation>

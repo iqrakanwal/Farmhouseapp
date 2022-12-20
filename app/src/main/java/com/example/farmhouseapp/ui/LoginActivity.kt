@@ -5,14 +5,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.farmhouseapp.R
-import com.example.farmhouseapp.SharedPreferencesUtils
 import com.example.farmhouseapp.UserAccount
 import com.example.farmhouseapp.Users
 import com.example.farmhouseapp.models.Orders
 import com.example.farmhouseapp.utils.Constants
 import com.example.farmhouseapp.models.User
 import com.example.farmhouseapp.ui.FirstScreen.Companion.userAccount
-import com.example.farmhouseapp.utils.Constants.Companion.senderid
 import com.example.farmhouseapp.utils.Constants.Companion.users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -46,10 +44,21 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         //   Toast.makeText(this, "${task.result.user?.email}", Toast.LENGTH_SHORT ).show()
                         arraylist?.clear()
-                        mFirebaseDatabase?.child("${users}")?.get()?.addOnSuccessListener { it ->
-                            Log.e("jckx", "${it.children}")
-                            it.children
+                        mFirebaseDatabase?.ref?.child("${Constants.users}")?.get()?.addOnSuccessListener { it ->
                             for (it in it.getChildren()) {
+                                val day: User = it.getValue(User::class.java)!!
+                                if(day.email==task.result.user?.email){
+                                    userAccount = UserAccount()
+                                    userAccount.userName = day.name
+                                    userAccount.phone = day.mobile_num
+                                    userAccount.email = day.email
+                                    userAccount.password = day.password
+                                    userAccount.role = day.role
+
+                                }
+                            }
+
+                         /*   for (it in it.getChildren()) {
                                 val day: User = it.getValue(User::class.java)!!
                                 if(day.email==task.result.user?.email){
                                     userAccount = UserAccount()
@@ -61,8 +70,8 @@ class LoginActivity : AppCompatActivity() {
 
 
                                 }
-                            }
-                            SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
+                            }*/
+                       //     SharedPreferencesUtils.setUUid(this,  mAuth?.getCurrentUser()?.getUid().toString() )
                             startActivity(Intent(this, MainScreen::class.java))
                             finish()
                         }?.addOnFailureListener {

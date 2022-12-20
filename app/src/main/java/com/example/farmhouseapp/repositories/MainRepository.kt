@@ -7,6 +7,7 @@ import com.example.farmhouseapp.Possibilities
 import com.example.farmhouseapp.models.*
 import com.example.farmhouseapp.utils.Constants
 import com.example.farmhouseapp.utils.Constants.Companion.animals
+import com.example.farmhouseapp.utils.Constants.Companion.appointmemnt
 import com.example.farmhouseapp.utils.Constants.Companion.doctors
 import com.example.farmhouseapp.utils.Constants.Companion.farms
 import com.example.farmhouseapp.utils.Constants.Companion.orders
@@ -273,15 +274,11 @@ class MainRepository(var context: Context) {
         callback: (Doctor?) -> Unit
     ) {
         mFirebaseDatabase?.ref?.child("${doctors}")?.get()?.addOnSuccessListener {
-            if (it.value != null) {
-                for (it in it.getChildren()) {
-                    val day: Doctor = it.getValue(Doctor::class.java)!!
-                    if ((day.name == firstName) && (day.email == userEmail)) {
-                        callback(day)
-                    }
+            for (it in it.getChildren()) {
+                val day: Doctor = it.getValue(Doctor::class.java)!!
+                if ((day.name == firstName) && (day.email == userEmail)) {
+                    callback(day)
                 }
-            } else {
-                callback(null)
             }
 
 
@@ -315,6 +312,7 @@ class MainRepository(var context: Context) {
     }
 
     fun getOrderFromBuyer(firstName: String?, list: (ArrayList<Orders>) -> Unit) {
+        firstName
         var orders: ArrayList<Orders> = arrayListOf()
         mFirebaseDatabase?.ref?.child("${Constants.orders}")?.get()?.addOnSuccessListener {
             for (it in it.getChildren()) {
@@ -372,8 +370,6 @@ class MainRepository(var context: Context) {
         mFirebaseDatabase?.ref?.child("${orders}")
             ?.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-
                     if (dataSnapshot.exists()) {
                         for (datas in dataSnapshot.children) {
                             if (datas.hasChild("orderstatus")) {
@@ -381,8 +377,6 @@ class MainRepository(var context: Context) {
                                     ?.child("orderstatus")
                                     ?.setValue(order);
                             }
-
-
 
 
                         }
@@ -395,6 +389,73 @@ class MainRepository(var context: Context) {
                 fun onCancelled(firebaseError: FirebaseError?) {}
             })
 
+    }
+
+    fun getAllDoctors(userName: String?, callback: (ArrayList<Doctor?>) -> Unit) {
+        var arrayList: ArrayList<Doctor?> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${doctors}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Doctor = it.getValue(Doctor::class.java)!!
+                arrayList?.add(day)
+            }
+            callback(arrayList)
+
+
+        }?.addOnFailureListener {
+
+
+        }
+
+
+    }
+
+    fun insertAppoint(s: Appointments, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${appointmemnt}")?.push()?.setValue(s)
+            ?.addOnSuccessListener {
+                callback("${Possibilities.SUCCESS}")
+            }?.addOnFailureListener {
+                callback("${Possibilities.FAILED}")
+            }
+    }
+
+    fun getAppoimentForDoctor(s: String, list: (ArrayList<Appointments>) -> Unit) {
+        var orders: ArrayList<Appointments> = arrayListOf()
+        mFirebaseDatabase?.ref?.child("${appointmemnt}")?.get()?.addOnSuccessListener {
+            for (it in it.getChildren()) {
+                val day: Appointments = it.getValue(Appointments::class.java)!!
+                if (day.doctorname.name == s) {
+                    orders.add(day)
+                }
+            }
+            list(orders)
+        }
+
+
+    }
+
+    fun updateAppointment(s: String, callback: (String) -> Unit) {
+        mFirebaseDatabase?.ref?.child("${appointmemnt}")
+            ?.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (datas in dataSnapshot.children) {
+                            if (datas.hasChild("appointmentstatus")) {
+                                mFirebaseDatabase?.ref?.child("${appointmemnt}")
+                                    ?.child(datas.getKey()!!)
+                                    ?.child("appointmentstatus")
+                                    ?.setValue(s);
+                            }
+
+
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+                fun onCancelled(firebaseError: FirebaseError?) {}
+            })
     }
 
 }
